@@ -39,7 +39,7 @@
   <script src="js/jquery.prettyPopin.js"></script>  
   <script src="js/jquery.prettyPhoto.js"></script>  
   <script src="js/custom.js"></script>
-    <script src="js/modernizr.custom.js"></script>
+  <script src="js/modernizr.custom.js"></script>
   <script src="js/jquery.js" type="text/javascript"></script>
   <script src="js/main.js" type="text/javascript"></script>
 
@@ -50,173 +50,202 @@
     <link rel="stylesheet" href="css/font-awesome-ie7.css">
   <![endif]-->  
 </head>
-
-
 <body>
-  
   <div id="wrapper">    
-
-
-  
-     <header>
-    <div class="container_12 header-inner relatived">
-      <div id="logo" class="grid_3">
-        <a href="index.php"><img src="images/logo_1.jpg" alt="olympia-logo" /></a>
-      </div>    
-      <nav class="grid_8 right omega">
+    <header>
+      <div class="container_12 header-inner relatived">
+        <div id="logo" class="grid_3">
+          <a href="index.php"><img src="images/logo_1.jpg" alt="olympia-logo" /></a>
+        </div>    
+        <nav class="grid_8 right omega">
           <ul class="primary-nav">
-                
-                <span aria-hidden="true" data-icon="&#6600;" class="home"></span>
-               
-            <li><a href="account.php">
+            <span aria-hidden="true" data-icon="&#6600;" class="home"></span>
+              <li><a href="account.php">
+                <?php
+                include "connect.php";
 
-            <?php
+                    ########## Google Settings.. Client ID, Client Secret from https://cloud.google.com/console #############
+                    $google_client_id     = '81462988222-s4iolt9npgon5ulbbemthqm5oeuprk23.apps.googleusercontent.com';
+                    $google_client_secret   = '0LAMwGCXPbUSVfGlabVUE_Bw';
+                    $google_redirect_url  = 'http://localhost/swapspace/home.php'; //path to your script
+                    $google_developer_key   = 'AIzaSyC2AOMQqNLQfANVXCF_jbSJ9w1HqpyoxKg';
 
-include "connect.php";
-
-########## Google Settings.. Client ID, Client Secret from https://cloud.google.com/console #############
-$google_client_id     = '81462988222-s4iolt9npgon5ulbbemthqm5oeuprk23.apps.googleusercontent.com';
-$google_client_secret   = '0LAMwGCXPbUSVfGlabVUE_Bw';
-$google_redirect_url  = 'http://localhost/swapspace/home.php'; //path to your script
-$google_developer_key   = 'AIzaSyC2AOMQqNLQfANVXCF_jbSJ9w1HqpyoxKg';
-
-// ########## MySql details (Replace with yours) #############
-// $db_username = "root"; //Database Username
-// $db_password = ""; //Database Password
-// $hostname = "localhost"; //Mysql Hostname
-// $db_name = 'login'; //Database Name
-// ###################################################################
+                    // ########## MySql details (Replace with yours) #############
+                    // $db_username = "root"; //Database Username
+                    // $db_password = ""; //Database Password
+                    // $hostname = "localhost"; //Mysql Hostname
+                    // $db_name = 'login'; //Database Name
+                    // ###################################################################
 
 
 
-//include google api files
-require_once 'src/Google_Client.php';
-require_once 'src/contrib/Google_Oauth2Service.php';
+                    //include google api files
+                    require_once 'src/Google_Client.php';
+                    require_once 'src/contrib/Google_Oauth2Service.php';
 
-//start session
-session_start();
+                    //start session
+                    session_start();
 
-$gClient = new Google_Client();
-$gClient->setApplicationName('Login to Sanwebe.com');
-$gClient->setClientId($google_client_id);
-$gClient->setClientSecret($google_client_secret);
-$gClient->setRedirectUri($google_redirect_url);
-$gClient->setDeveloperKey($google_developer_key);
+                    $gClient = new Google_Client();
+                    $gClient->setApplicationName('Login to Sanwebe.com');
+                    $gClient->setClientId($google_client_id);
+                    $gClient->setClientSecret($google_client_secret);
+                    $gClient->setRedirectUri($google_redirect_url);
+                    $gClient->setDeveloperKey($google_developer_key);
 
-$google_oauthV2 = new Google_Oauth2Service($gClient);
+                    $google_oauthV2 = new Google_Oauth2Service($gClient);
 
-//If user wish to log out, we just unset Session variable
-if (isset($_REQUEST['reset'])) 
-{
-  unset($_SESSION['token']);
-  $gClient->revokeToken();
-  //header('Location: ' . filter_var($google_redirect_url, FILTER_SANITIZE_URL)); //redirect user back to page
-  header('Location: http://localhost/swapspace/index.php');
-}
+                    //If user wish to log out, we just unset Session variable
+                    if (isset($_REQUEST['reset'])) 
+                    {
+                      unset($_SESSION['token']);
+                      $gClient->revokeToken();
+                      //header('Location: ' . filter_var($google_redirect_url, FILTER_SANITIZE_URL)); //redirect user back to page
+                      header('Location: http://localhost/swapspace/index.php');
+                    }
 
-//If code is empty, redirect user to google authentication page for code.
-//Code is required to aquire Access Token from google
-//Once we have access token, assign token to session variable
-//and we can redirect user back to page and login.
-if (isset($_GET['code'])) 
-{ 
-  $gClient->authenticate($_GET['code']);
-  $_SESSION['token'] = $gClient->getAccessToken();
-  header('Location: ' . filter_var($google_redirect_url, FILTER_SANITIZE_URL));
-  return;
-}
-
-
-if (isset($_SESSION['token'])) 
-{ 
-  $gClient->setAccessToken($_SESSION['token']);
-}
+                    //If code is empty, redirect user to google authentication page for code.
+                    //Code is required to aquire Access Token from google
+                    //Once we have access token, assign token to session variable
+                    //and we can redirect user back to page and login.
+                    if (isset($_GET['code'])) 
+                    { 
+                      $gClient->authenticate($_GET['code']);
+                      $_SESSION['token'] = $gClient->getAccessToken();
+                      header('Location: ' . filter_var($google_redirect_url, FILTER_SANITIZE_URL));
+                      return;
+                    }
 
 
-if ($gClient->getAccessToken()) 
-{
-    //For logged in user, get details from google using access token
-    $user         = $google_oauthV2->userinfo->get();
-    $user_id        = $user['id'];
-    $user_name      = filter_var($user['name'], FILTER_SANITIZE_SPECIAL_CHARS);
-    $email        = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
-   // $profile_url      = filter_var($user['link'], FILTER_VALIDATE_URL);
-    $profile_image_url  = filter_var($user['picture'], FILTER_VALIDATE_URL);
-    $personMarkup     = "$email<div><img src='$profile_image_url?sz=50'></div>";
-    $_SESSION['token']  = $gClient->getAccessToken();
-}
-else 
-{
-  //For Guest user, get google login url
-  $authUrl = $gClient->createAuthUrl();
-}
+                    if (isset($_SESSION['token'])) 
+                    { 
+                      $gClient->setAccessToken($_SESSION['token']);
+                    }
 
 
-if(isset($authUrl)) //user is not logged in, show login button
-{
- // echo '<a class="login" href="'.$authUrl.'"><img src="images/google-login-button.png" /></a>';
-} 
-else // user logged in 
-{
-   /* connect to database using mysqli */
-  $mysqli = new mysqli($hostname, $db_username, $db_password, $db_name);
-  
-  if ($mysqli->connect_error) {
-    die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
-  }
-  
-  //compare user id in our database
- $user_exist = $mysqli->query("SELECT COUNT(google_id) as usercount FROM google_users WHERE google_id=$user_id")->fetch_object()->usercount; 
-  if($user_exist)
-  {
-   echo 'Welcome back '.$user_name.'!';
-    //header('Location: http://localhost/swapspace/home.php');
-  
-  }else{ 
-    //user is new
-  echo 'Hi '.$user_name.', Thanks for Registering!';
-    $mysqli->query("INSERT INTO google_users (google_id, google_name, google_email, google_picture_link) 
-    VALUES ($user_id, '$user_name','$email', '$profile_image_url')");
-   // header('Location: http://localhost/swapspace/home.php');
-  }
-
-  
- //echo '<br /><a href="'.$profile_url.'" target="_blank"><img src="'.$profile_image_url.'?sz=100" /></a>';
-  //echo '<br /><a class="logout" href="?reset=1">Logout</a>';
-  
-  //list all user details
- //echo '<pre>'; 
-  //print_r($user);
- // echo '</pre>';  
-}
-$_SESSION['email_ses']=$email; 
-$_SESSION['name_ses']=$user_name;
-
-//$_SESSION["name"]="jahnavi10032@iiitd.ac.in";
-
-$q1="SELECT * FROM wishlist WHERE email='$email'";
-$q2="SELECT * FROM stash WHERE email='$email'";
-$r1=mysql_query($q1);
-$r2=mysql_query($q2);
-$n1=mysql_numrows($r1);
-$n2=mysql_numrows($r2);
+                    if ($gClient->getAccessToken()) 
+                    {
+                        //For logged in user, get details from google using access token
+                        $user         = $google_oauthV2->userinfo->get();
+                        $user_id        = $user['id'];
+                        $user_name      = filter_var($user['name'], FILTER_SANITIZE_SPECIAL_CHARS);
+                        $email        = filter_var($user['email'], FILTER_SANITIZE_EMAIL);
+                       // $profile_url      = filter_var($user['link'], FILTER_VALIDATE_URL);
+                        $profile_image_url  = filter_var($user['picture'], FILTER_VALIDATE_URL);
+                        $personMarkup     = "$email<div><img src='$profile_image_url?sz=50'></div>";
+                        $_SESSION['token']  = $gClient->getAccessToken();
+                    }
+                    else 
+                    {
+                      //For Guest user, get google login url
+                      $authUrl = $gClient->createAuthUrl();
+                    }
 
 
-// header('Location: http://localhost/swapspace/home.php');
+                    if(isset($authUrl)) //user is not logged in, show login button
+                    {
+                     // echo '<a class="login" href="'.$authUrl.'"><img src="images/google-login-button.png" /></a>';
+                    } 
+                    else // user logged in 
+                    {
+                       /* connect to database using mysqli */
+                      $mysqli = new mysqli($hostname, $db_username, $db_password, $db_name);
+                      
+                      if ($mysqli->connect_error) {
+                        die('Error : ('. $mysqli->connect_errno .') '. $mysqli->connect_error);
+                      }
+                      
+                      //compare user id in our database
+                     $user_exist = $mysqli->query("SELECT COUNT(google_id) as usercount FROM google_users WHERE google_id=$user_id")->fetch_object()->usercount; 
+                      if($user_exist)
+                      {
+                       echo 'Welcome back '.$user_name.'!';
+                        //header('Location: http://localhost/swapspace/home.php');
+                      
+                      }else{ 
+                        //user is new
+                      echo 'Hi '.$user_name.', Thanks for Registering!';
+                        $mysqli->query("INSERT INTO google_users (google_id, google_name, google_email, google_picture_link) 
+                        VALUES ($user_id, '$user_name','$email', '$profile_image_url')");
+                       // header('Location: http://localhost/swapspace/home.php');
+                      }
 
-?>
-</a>
-             <li><a href="#"><i class="cart-top-icon icomoon" aria-hidden="true" data-icon="&#x25e0;"></i></a></li>
-            <li><a href="" aria-hidden="true" style="display : inline; background: #e64a3c; border-radius: 95px; width: 2px; height: 7px; color:#fff">1</a><div class="megamenu">
-                <div class="grid_4 omega">
-                  <h4><strong>Notifications</strong></h4>
-                  <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quidem, ipsum modi quod ea eligendi pariatur incidunt cumque nihil quas porro! Quos aliquam dolore quae earum itaque! Sint, nobis magni ducimus.
-                  </p>                  
-                </div>
-                
-              </div></li>
-            <li><a  href="?reset=1">Log Out <i class="icomoon" aria-hidden="true" data-icon="&#xe014;"></i></a></li>           
+                      
+                     //echo '<br /><a href="'.$profile_url.'" target="_blank"><img src="'.$profile_image_url.'?sz=100" /></a>';
+                      //echo '<br /><a class="logout" href="?reset=1">Logout</a>';
+                      
+                      //list all user details
+                     //echo '<pre>'; 
+                      //print_r($user);
+                     // echo '</pre>';  
+                    }
+                    $_SESSION['email_ses']=$email; 
+                    $_SESSION['name_ses']=$user_name;
+
+                    //$_SESSION["name"]="jahnavi10032@iiitd.ac.in";
+
+                    $q1="SELECT * FROM wishlist WHERE email='$email'";
+                    $q2="SELECT * FROM stash WHERE email='$email'";
+                    $r1=mysql_query($q1);
+                    $r2=mysql_query($q2);
+                    $n1=mysql_numrows($r1);
+                    $n2=mysql_numrows($r2);
+
+
+                    // header('Location: http://localhost/swapspace/home.php');
+
+                    ?>
+                    </a>
+                    <li><a href="#"><i class="cart-top-icon icomoon" aria-hidden="true" data-icon="&#x25e0;"></i></a></li>
+                    <li><a href="" aria-hidden="true" style="display : inline; background: #e64a3c; border-radius: 95px; width: 2px; height: 7px; color:#fff">1</a><div class="megamenu">
+                        <div class="grid_4 omega">
+                          <h4><strong>Notifications</strong></h4>
+                         
+                           <ul>
+                    <?php
+                    $usr2=$email;
+                      //echo "Hi";
+                      //code to fetch wishlist item
+                      $qry=mysql_query("SELECT id,type from notif where user2='$usr2' and red=0 ORDER BY id DESC");
+                      while($row=mysql_fetch_row($qry))
+                      {
+                        $reqid=$row[0];
+                        if($row[1]=="offer")  //someones offering an item you need
+                        {
+                          //echo $reqid;
+                          $nqry=mysql_query("SELECT user1,item2,cat2 from notif where id='$reqid'");
+                          $nrow=mysql_fetch_row($nqry);
+                          $f1=$nrow[0];
+                          $f2=$nrow[1];
+                          $f3=$nrow[2];
+                          echo "<li><a href=\"#\"><i class=\"cus-tag-red\"></i>  $f1 has offered $f2 ($f3) to you !</a></li>"; 
+
+                        }
+                        elseif($row[1]=="borrow")  //someone is asking for an item you have
+                        {
+                          $nqry=mysql_query("SELECT user1,item2,loc2,cat2 from notif where id='$reqid'");
+                          $nrow=mysql_fetch_row($nqry);
+                          $f1=$nrow[0];
+                          $f2=$nrow[1];
+                          $f3=$nrow[2];
+                          $f4=$nrow[3];
+                          //echo $f1,$f2,$f3;
+                          echo "<li><a href=\"#\"><i class=\"cus-tag-red\"></i>  $f1 has asked for $f2 ($f4) pic: $f3 to you !</a></li>"; 
+                        }
+                        else
+                        {
+                          // code for swap
+                        }
+
+                      }
+             
+                    ?>
+                  </ul>
+                          <a href=""><i class="cus-accept"></i> Respond</a>
+                          <a href=""><i class="cus-delete"></i> Reject</a>                
+                        </div>
+                      </div></li>
+                    <li><a  href="?reset=1">Log Out <i class="icomoon" aria-hidden="true" data-icon="&#xe014;"></i></a></li>           
                               
             <!-- <li class="search-wrapper">
               <a href="#" aria-hidden="true" data-icon="&#x2610;" class="search-popup-trigger icomoon"></a>
@@ -253,12 +282,11 @@ $n2=mysql_numrows($r2);
         $num=mysql_numrows($result);
         ?>
        <div class="white-box box ">
-          <div class="box-heading">Categories</div>
+        
+        <div class="box-heading "><h4>Categories</h4></div>
           <div class="box-content">
             <div class="box-category">
-            
-
-                <?php
+            <?php
               if($num==0)
                 {
                   echo "There are no items in any category!";
@@ -273,22 +301,21 @@ $n2=mysql_numrows($r2);
                   {
                   $f1=mysql_result($result,$i,"catnm");
                   $f2=mysql_result($result,$i,"cnt");
-                 // echo "<li><a href=\"#\"><i class=\"cus-page-white-ruby\"></i>  $f1 ($f2)</a></li>";
                   if($i==0)
                   {
-                    echo "<li><a href=\"#\"><i class=\"cus-page-white-ruby\"></i>  $f1 ($f2)</a></li>";
+                    echo "<li><a href=\"#\"><i class=\"cus-page-white-ruby\">  </i> &nbsp; $f1 ($f2)</a></li>";
                   }
                   elseif ($i==1) 
                   {
-                    echo "<li><a href=\"#\"><i class=\"cus-book-open\"></i>  $f1 ($f2)</a></li>";
+                    echo "<li><a href=\"#\"><i class=\"cus-book-open\"></i> &nbsp; $f1 ($f2)</a></li>";
                   }
                   elseif ($i==2) 
                   {
-                    echo "<li><a href=\"#\"><i class=\" cus-user-red\"></i>  $f1 ($f2)</a></li>";
+                    echo "<li><a href=\"#\"><i class=\" cus-user-red\"></i> &nbsp; $f1 ($f2)</a></li>";
                   }
                   elseif ($i==3) 
                   {
-                    echo "<li><a href=\"#\"><i class=\" cus-disconnect\"></i>  $f1 ($f2)</a></li>";
+                    echo "<li><a href=\"#\"><i class=\" cus-disconnect\"></i> &nbsp;  $f1 ($f2)</a></li>";
                   }
                   elseif ($i==4) 
                   {
@@ -297,12 +324,12 @@ $n2=mysql_numrows($r2);
                   }
                   else 
                   {
-                    echo "<li><a href=\"#\"><i class=\" cus-world\"></i>  $f1 ($f2)</a></li>";
+                    echo "<li><a href=\"#\"><i class=\" cus-world\"></i> &nbsp; $f1 ($f2)</a></li>";
                   }
                   $i=$i+1;            
                   }
-                  echo "<li><a href=\"#\"><i class=\" cus-information\"></i>  $f3 ($f4)</a></li>";
-          echo "</ul>";        
+                  echo "<li><a href=\"#\"><i class=\" cus-information\"></i> &nbsp; $f3 ($f4)</a></li>";
+                  echo "</ul>";        
                 }
                 ?>
             </div>
@@ -318,13 +345,14 @@ $n2=mysql_numrows($r2);
         $num=mysql_numrows($result);
         ?>
          <div class="white-box box">
-          <div class="box-heading">Popular Tags</div>
+          <div class="box-heading"><h4>Popular Tags</h4></div>
           <div class="box-content">
             <div class="box-category">
               <?php
               if($num==0)
                 {
-                  echo "There are no tags";
+                  echo " &nbsp; &nbsp; &nbsp; &nbsp; <img src=\"images/notags.png\" >";
+                  echo "Unfortunately, there are no popular tags yet! Worry not!<br> Go add something to your stash and wishlist. Make things popular again! <i class=\"cus-emoticon-smile\"></i>";
                 }
               else{
                 echo"<ul>";
@@ -334,10 +362,10 @@ $n2=mysql_numrows($r2);
                   {
                   $f1=mysql_result($result,$i,"tagname");
                   $f2=mysql_result($result,$i,"countt");
-                  echo "<li><a href=\"#\"><i class=\"cus-tag-red\"></i>  $f1 ($f2)</a></li>"; 
+                  echo "<li><a href=\"search.php?val=\'$f1\'\">  <i class=\"cus-tag-red\"></i> &nbsp; $f1 ($f2)</a></li>"; 
                   $i=$i+1;            
                   }
-    echo    "</ul>";        
+                  echo    "</ul>";        
                 }
                 ?>
             </div>
@@ -346,10 +374,10 @@ $n2=mysql_numrows($r2);
         
               
       </div><!-- end #column-left -->
-      <div style="margin-top: -30px;" class="clearfix aside-container grid_6 omega">
+      <div style="margin-top: -30px; margin-left: 20px;" class="clearfix aside-container grid_8 omega">
         <div class="subscribe">
-            <form action="post">
-              <input type="text" name="email" value="" placeholder="What are you looking for ?" />
+            <form action="search.php" method="post">
+              <input type="text" name="val" value="" placeholder="What are you looking for ?" />
               <button aria-hidden="true" data-icon="&#x2610;" title="Search" name="submit" class="icomoon"></button>
             </form>
 
@@ -366,131 +394,179 @@ $n2=mysql_numrows($r2);
                     </a>
               </div> -->
           </div>
-<div style="margin-top: 30px;">
-
-<?php
-
-$qry=mysql_query("SELECT id,type from feed ORDER BY id DESC");
-while($row=mysql_fetch_row($qry))
-{
-  $match=$row[0];
- 
-  if($row[1]=="stash")
-  {
-     $new=mysql_query("SELECT user1,item1,loc1,category1 from feed where id='$match'");
-    $inrow = mysql_fetch_row($new);
-    $f1=$inrow[0];
-    $f2=$inrow[1];
-    $f3=$inrow[2];
-    $f4=$inrow[3];
-    ?>
-
-    <div class= "stashbox white-box">  
-             
-            <img style="float: left; margin-right: 5px;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
-              <p> <a class="a_col" href="user.html"><?php echo $f1 ?></a> added an item : <strong> <?php echo $f2 ?> </strong> to her stash in the category <strong><?php echo $f4 ?></strong>.</p>
-              <div class="white-box-stash">
-                <img src="images/circle-icons/circle-icons/full-color/png/64px/fashion.png"> 
-                <a href= <?php echo $f3; ?> class="preview" ><img  height= "64" width= "64" style=" border: 1px solid gainsboro; -webkit-border-radius: 20px; -moz-border-radius: 20px; border-radius: 20px;" src=<?php echo $f3 ; ?> ></a>
-               </div>
-          </div>
-<?php
-
- }
-  elseif($row[1]=="wishlist")
-  {
+  <div style="margin-top: 30px;">
+  <?php
   
-    $new=mysql_query("SELECT user1,item1,category1 from feed where id='$match'");
-    $inrow = mysql_fetch_row($new);
-    $f1=$inrow[0];
-    $f2=$inrow[1];
-    $f3=$inrow[2];
-    ?>
+  
+    $qry=mysql_query("SELECT id,type from feed ORDER BY id DESC");
 
- <div class= "wishlistbox white-box">  
-             
-            <img style="float: left; margin-right: 5px;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
-              <p><a class="a_col" href="user.html"><?php echo $f1  ?></a> added an item : <strong><?php echo $f2 ?></strong> in the category <strong><?php echo $f3 ?></strong>. </p>
-              <div class="white-box-wish"><img src="images/circle-icons/circle-icons/full-color/png/64px/umbrella.png"></div>
-          </div>
+      while($row=mysql_fetch_row($qry))
+        {
+          $match=$row[0];
+            if($row[1]=="stash")
+              {
+                $new=mysql_query("SELECT user1,item1,loc1,category1 from feed where id='$match'");
+				
+                $inrow = mysql_fetch_row($new);
+                $f1=$inrow[0];
+                $f2=$inrow[1];
+                $f3=$inrow[2];
+                $f4=$inrow[3];
 
-<?php 
-}
-    else 
-    {
+				$qalt=mysql_query("SELECT google_name from google_users WHERE google_email='$f1'");
+				$f5=mysql_result($qalt,0,"google_name");
+	
+                $pic = 'images/circle-icons/circle-icons/full-color/png/64px/';
+                if ($f4=='Books')
+                      $pic=$pic.'bookshelf.png';
+                    else if ($f4=='Sports')
+                      $pic=$pic.'skateboard.png';
+                    else if ($f4=='Accessories')
+                      $pic=$pic.'fashion.png';
+                    else if ($f4=='Clothes')
+                      $pic=$pic.'cart.png';
+                    else if ($f4=='Electronics')
+                      $pic=$pic.'plugin.png';
+                    else
+                      $pic=$pic.'dolly.png';
 
-      ?>
-          <div  class= "swapbox white-box">  
-             
-            <img style="float: left;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
-              <p> &nbsp; <a class="a_col" href="user.html"><?php echo $f1 ?></a> swapped an item with  <a class="b_col" href="user.html">Arhan Sibal</a>.</p>
-              <div ><img src="images/circle-icons/circle-icons/full-color/png/64px/art.png"> 
-                <img src="images/swap.png"> <img src="images/circle-icons/circle-icons/full-color/png/64px/bike.png"></a></div>
-          </div>
+                ?>
 
-         <?php
-         }
-}
-         ?>
 
-         </div>
 
-          
+                <div class="feedbox" >  
+                  <img style="float: left; margin-right: 5px;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
+                    <div class=" triangle-box "></div>
+                      <div class="triangle-box-content">
+                        <p style="margin-left: 10px;"><a class="a_col" href="user.html"><?php echo $f5 ?></a> added an item : <strong> <?php echo $f2 ?> </strong> to her stash in the category <strong><?php echo $f4 ?></strong>.</p>
+                          <div class="white-box-stash">
+                            <img src=<?php echo $pic; ?> > 
+                            <a href= "<?php echo $f3; ?>" class="preview" ><img  height= "64" width= "64" style=" border: 1px solid gainsboro; -webkit-border-radius: 20px; -moz-border-radius: 20px; border-radius: 20px;" src="<?php echo $f3 ; ?>" ></a>
+                           </div> 
+                         </div>
+                      </div>
+               <?php
+               }             
+              elseif($row[1]=="wishlist")
+              {
+              
+                $new=mysql_query("SELECT user1,item1,category1 from feed where id='$match'");
+                $inrow = mysql_fetch_row($new);
+                $f1=$inrow[0];
+                $f2=$inrow[1];
+                $f3=$inrow[2];
 
-       </div><!-- end .aside-container -->
+                $pic = 'images/circle-icons/circle-icons/full-color/png/64px/';
+				$qalt=mysql_query("SELECT google_name from google_users WHERE google_email='$f1'");
+				$f5=mysql_result($qalt,0,"google_name");
+                if ($f3=='Books')
+                      $pic=$pic.'bookshelf.png';
+                    else if ($f3=='Sports')
+                      $pic=$pic.'skateboard.png';
+                    else if ($f3=='Accessories')
+                      $pic=$pic.'fashion.png';
+                    else if ($f3=='Clothes')
+                      $pic=$pic.'cart.png';
+                    else if ($f3=='Electronics')
+                      $pic=$pic.'plugin.png';
+                    else
+                      $pic=$pic.'dolly.png';
+
+                ?>
+
+             <div class= "feedbox">  
+                <img style="float: left; margin-right: 5px;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
+                  <div class=" triangle-box "></div>
+                    <div class="triangle-box-content">
+                      <p style="margin-left: 10px;" ><a class="a_col" href="user.html"><?php echo $f5;  ?></a> added an item : <strong><?php echo $f2; ?></strong> in the category <strong><?php echo $f3 ?></strong>. </p>
+                        <div class="white-box-wish"><img src=<?php echo $pic; ?>>
+                        </div>
+                      </div>
+                  </div>
+
+            <?php 
+               }
+                else 
+                {
+
+                  ?>
+                  <div  class= "feedbox">  
+                    <img style="float: left;"src="images/circle-icons/circle-icons/full-color/png/64px/profle.png">
+                      <div class=" triangle-box "></div>
+                        <div class="triangle-box-content">
+                          <p style="margin-left: 10px;">  <a class="a_col" href="user.html"><?php echo $f5 ?></a> swapped an item with  <a class="b_col" href="user.html">Arhan Sibal</a>.</p>
+                          <div ><img src="images/circle-icons/circle-icons/full-color/png/64px/art.png"> 
+                            <img src="images/swap.png"> <img src="images/circle-icons/circle-icons/full-color/png/64px/bike.png"></a>
+                          </div>
+                       </div>
+                     </div>
+
+                    <?php
+                        }
+                      }
+                    ?>
+                   </div>
+                  </div><!-- end .aside-container -->
      
       <div style="float:right;" id="column-right" class="grid_3 omega">
         <div class="white-box box content">
-          <div class="box-heading"><a style="color: #1c1c1c;" title="Open Wishlist" href="wishlist.php">Wishlist</a></div>
-          <div class="box-content">
-            <div class="box-category">
-              <ul>
+          <div class="box-heading"><a style="color: #1c1c1c;" title="Open Wishlist" href="wishlist.php"><h4>Wishlist</h4></a></div>
+            <div class="box-content">
+              <div class="box-category">
+                <ul>
+                  <?php
+                    if ($n1==0)
+                     { ?>
+                    <img src="images/wishlamp.jpg">
+                    <?php
+                      echo "Looks like your wishlist is empty. Go make some wishes! <i class=\"cus-emoticon-smile\"></i> ";
+                    }
+                        else
+                          {
+                            $i=0;
+                              while ($i<$n1)
+                                {
+                                    $item1=mysql_result($r1,$i,"item");
+                  ?>
+                
+                <li><a href="#"><i class="cus-cart-add"></i> &nbsp; <?php echo $item1; ?></a></li>             
+                
                 <?php
-                               
-                               if ($n1==0)
-                                       echo "No Updates Yet!";
-                               else
-                               {
-                                       $i=0;
-                                       while ($i<$n1)
-                                       {
-                                               $item1=mysql_result($r1,$i,"item");
-                               ?>
-                <li><a href="#"><i class="cus-bullet-star"></i> <?php echo $item1; ?></a></li>             
-                <?php
-                               $i++;
-                               }
-                               }
-                               ?>
+                  $i++;
+                    }
+                  }
+                ?>
               </ul>
             </div>
           </div>
         </div>
 
         <div class="white-box box">
-          <div class="box-heading"><a style="color: #1c1c1c;" title="Open Stash item" href="stash.php">My Stash</a></div>
+          <div class="box-heading">
+            <a style="color: #1c1c1c;" title="Open Stash item" href="stash.php"><h4>Stash</h4></a>
+          </div>
           <div class="box-content">
             <div class="box-category">
               <ul>
-               
-                               <?php
-                               
-                               if ($n2==0)
-                                       echo "No Updates Yet!";
-                               else
-                               {
-                                       $j=0;
-                                       while ($j<$n2)
+                <?php
+                  if ($n2==0)
+                  {
+                    echo "<img src=\"images/emptychest.jpg\" >" ;
+                    echo "Ah! Your stash is empty. Go tell the world what you have! <i class=\"cus-emoticon-happy\"></i>";
+                  }
+                  else
+                    {
+                      $j=0;
+                       while ($j<$n2)
                                        {
                                                $item2=mysql_result($r2,$j,"item");
                                ?>
-                <li><a href="#"><i class="cus-thumb-up"></i> <?php echo $item2; ?></a></li>
+                <li><a href="#"><i class="cus-box"></i> &nbsp; <?php echo $item2; ?></a></li>
                 <?php
-                               $j++;
-                               }
-                               }
-                               ?>          
-                
+                  $j++;
+                    }
+                  }
+                ?>          
               </ul>
             </div>
           </div>
@@ -500,9 +576,9 @@ while($row=mysql_fetch_row($qry))
    
   </div><!-- end .main-container -->
   <footer>
-      <span class="style-border"></span>
+    <span class="style-border"></span>
       <div class="container_12">
-        <div class="grid_12 widget-box">
+        <div class="grid_14 widget-box">
           <div class="box-heading">
               <h4>Contact Us</h4>
           </div>
@@ -510,11 +586,8 @@ while($row=mysql_fetch_row($qry))
             <li><i class="icomoon" aria-hidden="true" data-icon="&#x25df;"></i><span>+91-8130201142 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></li>
             <li><i class="icomoon" aria-hidden="true" data-icon="&#x21b4;"></i><span>akanksha10008@iiitd.ac.in &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></li>
             <li><i class="icomoon" aria-hidden="true" data-icon="&#xe007;"></i><span>IIIT-Delhi &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></li>
-
-        
-       </ul>
+          </ul>
         </div>
-        
       </div><!-- end .container_12 -->
     </footer>
   </div><!-- end #wrapper This wrapper cover all the website-->  
