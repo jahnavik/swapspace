@@ -55,338 +55,303 @@ $name= $_SESSION['name_ses'];
   <![endif]-->  
 </head>
 <body>
-
   <div class="md-modal md-effect-1" id="modal-1">
-      <div class="md-content">
-        <h3 style="color: #fff;">Add to Wishlist!</h3>
+    <div class="md-content">
+      <h3 style="color: #fff;">Add to Wish List!</h3>
         <div>
           <form action="wishlist_create.php" method="POST" enctype="multipart/form-data">
-  <fieldset>
-    
-    <strong>Product Name: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input required name="product" type="text"><br><br></strong>
-    <strong>Select Product Category: &nbsp; &nbsp;</strong>
-  <div class="optiondrop">
-  <select required name="option">
-    <option value=""> --- Please Select --- </option>
-  <option value="Books">Books</option>
-  <option value="Accessories">Accessories</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Clothes">Clothes</option>
-  <option value="Sports">Sports Equipments</option>
-  <option value="Others">Others/Miscellaneous</option>
-</select>
-<span class="selected_value"></span>
-</div>
-  </fieldset>
+            <fieldset>
+              <strong>Product Name: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input required name="product" type="text"><br><br></strong>
+              <strong>Select Product Category: &nbsp; &nbsp;</strong>
+                <div class="optiondrop">
+                  <select required name="option">
+                    <option value=""> --- Please Select --- </option>
+                    <option value="Books">Books</option>
+                    <option value="Accessories">Accessories</option>
+                    <option value="Electronics">Electronics</option>
+                    <option value="Clothes">Clothes</option>
+                    <option value="Sports">Sports Equipments</option>
+                    <option value="Others">Others/Miscellaneous</option>
+                  </select>
+                  <span class="selected_value"></span>
+                </div>
+            </fieldset>
 
          
           <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin-top: 30px;
-          margin-left: 190px;
-          border-radius: 2px;
-          background: #A5281B;"
-			type="submit"
-			name="add"
-           >Submit</button>
+              style= "border: none;
+              padding: 0.6em 1.2em;
+              background: #c0392b;
+              color: #fff;
+              font-family: 'Lato', Calibri, Arial, sans-serif;
+              font-size: 1em;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              cursor: pointer;
+              display: inline-block;
+              margin-top: 30px;
+              margin-left: 190px;
+              border-radius: 2px;
+              background: #A5281B;"
+			   type="submit" name="add" >Submit</button>
 		   
 		   <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin: 3px 2px;
-          border-radius: 2px;
-          background: #A5281B;"
-			class="md-close"
-           >Close</button>
+              style= "border: none;
+              padding: 0.6em 1.2em;
+              background: #c0392b;
+              color: #fff;
+              font-family: 'Lato', Calibri, Arial, sans-serif;
+              font-size: 1em;
+              letter-spacing: 1px;
+              text-transform: uppercase;
+              cursor: pointer;
+              display: inline-block;
+              margin: 3px 2px;
+              border-radius: 2px;
+              background: #A5281B;"
+			   class="md-close" >Close</button>
 		   
 		   
-	</form>	   
-        </div>
+	     </form>	   
       </div>
     </div>
+  </div>
   
   <div id="wrapper">    
-        
-  
     <header>      
-    <div class="container_12 header-inner relatived">
-      <div id="logo" class="grid_3">
-        <a href="index.php"><img src="images/logo_1.jpg" alt="olympia-logo" /></a>
-      </div>    
-     <nav class="grid_8 right omega">
+      <div class="container_12 header-inner relatived">
+        <div id="logo" class="grid_3">
+          <a href="index.php"><img src="images/logo_1.jpg" alt="olympia-logo" /></a>
+        </div>    
+      <nav class="grid_8 right omega">
       <ul class="primary-nav">
-                
-                <span aria-hidden="true" data-icon="&#6600;" class="home"></span>
-              
-            <li><a href="account.php">Hi Dhruv !</a></li>
-             <li><a  href="index.html">Log Out <i class="icomoon" aria-hidden="true" data-icon="&#xe014;"></i></a></li>  
-          </ul>          
-        </nav>
+        <span aria-hidden="true" data-icon="&#6600;" class="home"></span>
+          <li><a href="account.php">Hi <?php echo "$name" ?> !</a></li>
+          <li><a  href="index.html">Log Out <i class="icomoon" aria-hidden="true" data-icon="&#xe014;"></i></a></li>  
+      </ul>          
+      </nav>
       </div><!-- container_12 -->
     </header>
     <div id="main-container">
-      
+      <?php
+             $tbl_name="wishlist";
+             $query="SELECT * FROM $tbl_name WHERE email='$email'";
+              $result=mysql_query($query);
+              $num=mysql_numrows($result);
+           ?> 
+      <div class="page-top-leader omega">
+        <div class="container_12 relatived clearfix">
+          <h1 class="page-title">My Wish List (<?php echo $num; ?> items)</h1>
+            <div class="breadcrumb">
+              <span class="br_before">You are in:</span>
+              <a href="home.php">Home</a>        
+              <span class="br_sep">/</span>
+              <a href="account.php">My Account</a>
+              <span class="br_sep">/</span>
+              <span class="cur_link">My Wish List</span>
+          </div>
+        </div>
+      </div><!-- .page-top-leader -->    
       <div class="container_12 aside-container">
-      <div style="margin-top: -30px;" class="grid_9">
-       
-	    <?php
-	  	include "connect.php";
-		$tbl_name="wishlist";
-		$query="SELECT * FROM $tbl_name WHERE email='$email'";
-		$result=mysql_query($query);
-		$num=mysql_numrows($result);
-	  ?> 
-	   
-        <h2>My Wish List (<?php echo $num; ?> items)</h2>
-         <a style="margin-top: -42px;" class="md-trigger style-button right"  class="icomoon" aria-hidden="true" data-icon="&#xe01a;" data-modal="modal-1"><strong>Add to Wishlist</strong></a>
-         <div class="md-overlay"></div><!-- the overlay element -->
-	
-	
-        <div style="margin-bottom: 20px;"class="wishlist-info">
-          <table> 
-           <thead>
-            <tr>
-              <td class="image">Product Category</td>
-              <td class="name">Product Name</td>
-              <td class="quantity">Actions</td>
-
-            </tr>
+        <div style="margin-top: -30px;" class="grid_10">
+          <div style="margin-bottom: 20px;"class="wishlist-info">
+            <table> 
+              <thead>
+                <tr>
+                  <td class="image">Product Category</td>
+                  <td class="name">Product Name</td>
+                  <td class="quantity">Actions</td>
+                </tr>
             </thead>
             <tbody>
               <?php
-
-    if($num==0)
-    {
-              echo"<tr>";
-
-              echo"<td><img src=\"images/no_update.jpg\"></td>";
-              echo"<td style=\"font-size : 20px;\">";
-              
-      echo "There are no items in your wish list.";
-
-  
-        echo "</td>";
-                    echo "   <td></td>";
-echo "			</tr>";
-  }
-     else { 
-      $i=0;
-			
-			while ($i<$num)
-			{ 
-				$modale="modale";
-				$modald="modald";	
-				$f1=mysql_result($result,$i,"email");
-				$f2=mysql_result($result,$i,"item");
-				$f3=mysql_result($result,$i,"category");
-				$f4=mysql_result($result,$i,"id");
-				$pic = 'images/circle-icons/circle-icons/full-color/png/64px/';
-				
-				if ($f3=='Books')
-					$pic=$pic.'bookshelf.png';
-				else if ($f3=='Sports')
-					$pic=$pic.'skateboard.png';
-				else if ($f3=='Accessories')
-					$pic=$pic.'fashion.png';
-				else if ($f3=='Clothes')
-					$pic=$pic.'cart.png';
-				else if ($f3=='Electronics')
-					$pic=$pic.'plugin.png';
-				else
-					$pic=$pic.'cart.png';
-			
-				$modale=$modale.$f4;
-				$modald=$modald.$f4;
-				
-			?>
+                if($num==0)
+                  {
+                    echo"<tr>";
+                    echo"<td><img style=\"margin-left: 80px;\" src=\"images/geniew.png\"></td>";
+                    echo"<td style=\"font-size : 20px;\">";
+                    echo "<p style=\"margin-left: 70px;\">Ho ho! Looks like your wishlist is empty. Go make some wishes! <i class=\"cus-emoticon-smile\"></i></p>";
+                    echo "</td>";
+                    echo " <td></td>";
+                    echo "</tr>";
+                  }
+                else { 
+                $i=0;
+              			while ($i<$num)
+              			{ 
+              				$modale="modale";
+              				$modald="modald";	
+              				$f1=mysql_result($result,$i,"email");
+              				$f2=mysql_result($result,$i,"item");
+              				$f3=mysql_result($result,$i,"category");
+              				$f4=mysql_result($result,$i,"id");
+              				$pic = 'images/circle-icons/circle-icons/full-color/png/64px/';
+              				
+              				if ($f3=='Books')
+              					$pic=$pic.'bookshelf.png';
+              				else if ($f3=='Sports')
+              					$pic=$pic.'skateboard.png';
+              				else if ($f3=='Accessories')
+              					$pic=$pic.'fashion.png';
+              				else if ($f3=='Clothes')
+              					$pic=$pic.'cart.png';
+              				else if ($f3=='Electronics')
+              					$pic=$pic.'plugin.png';
+              				else
+              					$pic=$pic.'cart.png';
+              			
+              				$modale=$modale.$f4;
+              				$modald=$modald.$f4;
+              				
+              			?>
               <tr>
                 <td><a href="#" title=<?php echo $f3; ?>><img src="<?php echo $pic; ?>" alt="product name"></a></td>
                 <td><?php echo $f2; ?></td>
 				
-	 <div class="md-modal md-effect-1" id="<?php echo $modald; ?>">
-      <div class="md-content">
-        <h3 style="color: #fff;">Delete item from Wishlist!</h3>
-        <div>
-          <form action="wishlist_delete.php" method="POST" enctype="multipart/form-data">
-         <input type="hidden" name="d1" value="<?php echo $f2; ?>">
-          <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin-top: 2px;
-          margin-left: 200px;
-          border-radius: 2px;
-          background: #A5281B;"
-			type="submit"
-			name="del"
-           >Yes</button>
+	             <div class="md-modal md-effect-1" id="<?php echo $modald; ?>">
+                 <div class="md-content">
+                   <h3 style="color: #fff;">Delete item from Wish List!</h3>
+                    <div>
+                      <form action="wishlist_delete.php" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="d1" value="<?php echo $f2; ?>">
+                           <button 
+                              style= "border: none;
+                              padding: 0.6em 1.2em;
+                              background: #c0392b;
+                              color: #fff;
+                              font-family: 'Lato', Calibri, Arial, sans-serif;
+                              font-size: 1em;
+                              letter-spacing: 1px;
+                              text-transform: uppercase;
+                              cursor: pointer;
+                              display: inline-block;
+                              margin-top: 2px;
+                              margin-left: 200px;
+                              border-radius: 2px;
+                              background: #A5281B;"
+                    		    	type="submit" name="del">Yes</button>
+        		   
+        		              <button 
+                            style= "border: none;
+                            padding: 0.6em 1.2em;
+                            background: #c0392b;
+                            color: #fff;
+                            font-family: 'Lato', Calibri, Arial, sans-serif;
+                            font-size: 1em;
+                            letter-spacing: 1px;
+                            text-transform: uppercase;
+                            cursor: pointer;
+                            display: inline-block;
+                            margin: 3px 2px;
+                            border-radius: 2px;
+                            background: #A5281B;"
+                  			    class="md-close">No</button>
+          		        </form>	   
+                    </div>
+                  </div>
+                </div>
+                <div class="md-modal md-effect-1" id="<?php echo $modale; ?>">
+                  <div class="md-content">
+                   <h3 style="color: #fff;">Edit Wish List</h3>
+                     <div>
+                       <form action="wishlist_modify.php" method="POST" enctype="multipart/form-data">
+                        <fieldset>
+                          <strong>Product Name: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input required name="prod" type="text" value="<?php echo $f2; ?>"><br><br></strong>
+                          <strong>Select Product Category: &nbsp; &nbsp;</strong>
+                          	<input type="hidden" name="e1" value="<?php echo $f4; ?>">
+                              <div class="optiondrop">
+                                <select required name="opt" >
+                                  <option value=""> --- Please Select --- </option>
+                                  <option value="Books">Books</option>
+                                  <option value="Accessories">Accessories</option>
+                                  <option value="Electronics">Electronics</option>
+                                  <option value="Clothes">Clothes</option>
+                                  <option value="Sports">Sports Equipments</option>
+                                  <option value="Others">Others/Miscellaneous</option>
+                                 </select>
+                                  <span class="selected_value"></span>
+                             </div>
+                      </fieldset>
+                    
+                    <button 
+                        style= "border: none;
+                        padding: 0.6em 1.2em;
+                        background: #c0392b;
+                        color: #fff;
+                        font-family: 'Lato', Calibri, Arial, sans-serif;
+                        font-size: 1em;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        display: inline-block;
+                        margin-top: 30px;
+                        margin-left: 190px;
+                        border-radius: 2px;
+                        background: #A5281B;"
+              			    type="submit" name="edit">Update</button>
 		   
-		   <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin: 3px 2px;
-          border-radius: 2px;
-          background: #A5281B;"
-			class="md-close"
-           >No</button>
-		   
-		   
-	</form>	   
-        </div>
+              		   <button 
+                        style= "border: none;
+                        padding: 0.6em 1.2em;
+                        background: #c0392b;
+                        color: #fff;
+                        font-family: 'Lato', Calibri, Arial, sans-serif;
+                        font-size: 1em;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                        cursor: pointer;
+                        display: inline-block;
+                        margin: 3px 2px;
+                        border-radius: 2px;
+                        background: #A5281B;"
+              			    class="md-close" >Close</button>
+		            </form>	   
+              </div>
+             </div>
+             </div>
+             <td class="action">
+              <a class="update_cart icomoon md-trigger" data-icon="&#xe00b;" title="Update" aria-hidden="true" data-modal="<?php echo $modale; ?>"></a>
+				      <div class="md-overlay"></div><!-- the overlay element --> 
+              <a class="remove_cart icomoon md-trigger" data-icon="&#xe004;" title="Remove" aria-hidden="true" data-modal="<?php echo $modald; ?>"></a>
+					    <div class="md-overlay"></div><!-- the overlay element -->        
+				    </td>
+          </tr>  
+      			<?php
+      			$i++;
+      			 }			 
+      			 }
+      			?>
+			   </tbody>
+        </table>          
+      </div><!-- .wishlist-info -->
       </div>
-    </div>
-
-  <div class="md-modal md-effect-1" id="<?php echo $modale; ?>">
-      <div class="md-content">
-        <h3 style="color: #fff;">Edit Wishlist</h3>
-        <div>
-          <form action="wishlist_modify.php" method="POST" enctype="multipart/form-data">
-  <fieldset>
-    
-    <strong>Product Name: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<input required name="prod" type="text" value="<?php echo $f2; ?>"><br><br></strong>
-    <strong>Select Product Category: &nbsp; &nbsp;</strong>
-	<input type="hidden" name="e1" value="<?php echo $f4; ?>">
-  <div class="optiondropdown">
-  <select required name="opt" >
-    <option value=""> --- Please Select --- </option>
-  <option value="Books">Books</option>
-  <option value="Accessories">Accessories</option>
-  <option value="Electronics">Electronics</option>
-  <option value="Clothes">Clothes</option>
-  <option value="Sports">Sports Equipments</option>
-  <option value="Others">Others/Miscellaneous</option>
-</select>
-<span class="selected_value"></span>
-</div>
-  </fieldset>
-
-         
-          <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin-top: 30px;
-          margin-left: 190px;
-          border-radius: 2px;
-          background: #A5281B;"
-			type="submit"
-			name="edit"
-           >Update</button>
-		   
-		   <button 
-          style= "border: none;
-          padding: 0.6em 1.2em;
-          background: #c0392b;
-          color: #fff;
-          font-family: 'Lato', Calibri, Arial, sans-serif;
-          font-size: 1em;
-          letter-spacing: 1px;
-          text-transform: uppercase;
-          cursor: pointer;
-          display: inline-block;
-          margin: 3px 2px;
-          border-radius: 2px;
-          background: #A5281B;"
-			class="md-close"
-           >Close</button>
-		   
-		   
-	</form>	   
-        </div>
-      </div>
-    </div>
-
-                
-                <td class="action">
-                  <a class="update_cart icomoon md-trigger" data-icon="&#xe00b;" title="Update" aria-hidden="true" data-modal="<?php echo $modale; ?>"></a>
-				  <div class="md-overlay"></div><!-- the overlay element --> 
-                  <a class="remove_cart icomoon md-trigger" data-icon="&#xe004;" title="Remove" aria-hidden="true" data-modal="<?php echo $modald; ?>"></a>
-					<div class="md-overlay"></div><!-- the overlay element -->        
-				  
-				</td>
-              </tr>
-
-			  
-			<?php
-			$i++;
-			 }			 
-			 }
-			?>
-			  
-			  </tbody>
-          </table>          
-        </div><!-- .wishlist-info -->
-       
-      </div>
-      <div style="margin-top: -98px;" id="column-left" class="grid_3 aside omega">   
-        <div style="margin-bottom: 20px;"class="breadcrumb">
-            <span class="br_before">You are in:</span>
-            <a href="home.php">Home</a>        
-            <span class="br_sep">/</span>
-            <a href="account.php">Profile</a>
-            <span class="br_sep">/</span>
-            <span class="cur_link">My Wishlist</span>
-          </div> 
+      
+      <div style="margin-left: 50px; " id="column-left" class="grid_3  omega">   
+        <a style="margin-top: -62px;" class="md-trigger style-button left"  class="icomoon" aria-hidden="true" data-icon="&#xe01a;" data-modal="modal-1"><strong>Add to Wishlist</strong></a>
+         <div class="md-overlay"></div><!-- the overlay element -->
+        
         <div class="box">
           <div class="box-heading"><h4>My Account</h4></div>
           <div class="box-content">
             <div class="box-category">
               <ul>
-                <li><a href="home.php"><i class="cus-bullet-red"></i> Home</a></li>                
-                <li><a href="account.php"><i class="cus-bullet-red"></i> Profile</a></li>
-                <li><a class="active" href="wishlist.php"><i class="cus-bullet-red"></i> My Wishlist</a></li>                
-                <li><a href="stash.php"><i class="cus-bullet-red"></i> My Stash</a></li>
+                <li><a href="home.php"><i class="cus-house"></i>&nbsp; Home</a></li>                
+                <li><a href="account.php"><i class="cus-report-user"></i>&nbsp; My Account</a></li>
+                <li><a class="active" href="wishlist.php"><i class="cus-cart-add"></i>&nbsp; My Wish List</a></li>                
+                <li><a href="stash.php"><i class="cus-box"></i>&nbsp; My Stash</a></li>
                
               </ul>
             </div>
           </div>
         </div>
       </div>
-      </div><!--end #column-left -->      </div><!-- end .container_12 -->
+      </div><!--end #column-left -->      
+    </div><!-- end .container_12 -->
     
     <footer>
       <span class="style-border"></span>
       <div class="container_12">
-        <div class="grid_12 widget-box">
+        <div class="grid_14 widget-box">
           <div class="box-heading">
              <h4>Contact Us</h4>
           </div>
@@ -394,13 +359,9 @@ echo "			</tr>";
             <li><i class="icomoon" aria-hidden="true" data-icon="&#x25df;"></i><span>+91-8130201142 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></li>
             <li><i class="icomoon" aria-hidden="true" data-icon="&#x21b4;"></i><span>akanksha10008@iiitd.ac.in &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</span></li>
             <li><i class="icomoon" aria-hidden="true" data-icon="&#xe007;"></i><span>IIIT-Delhi &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </span></li>
-
-        
-       </ul>
+           </ul>
         </div>
-       
-       
-      </div><!-- end .container_12 -->
+       </div><!-- end .container_12 -->
     </footer>
   </div><!-- end #wrapper This wrapper cover all the website-->  
    <script src="js/classie.js"></script>

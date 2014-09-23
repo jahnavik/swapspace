@@ -1,8 +1,8 @@
 <?php
 include "connect.php";
 session_start();
-$email= $_SESSION['email_ses'];
-$name= $_SESSION['name_ses'];
+$emails= $_SESSION['email_ses'];
+$names= $_SESSION['name_ses'];
 
 if(isset($_GET['user']))
 {
@@ -90,7 +90,7 @@ if(isset($_GET['user']))
       <nav class="grid_8 right omega">
         <ul class="primary-nav">
           <span aria-hidden="true" data-icon="&#6600;" class="home"></span>
-            <li><a href="home.php">Hi <?php echo $name; ?> !</a></li>
+            <li><a href="home.php">Hi <?php echo $names; ?> !</a></li>
             <li><a  href="index.php">Log Out <i class="icomoon" aria-hidden="true" data-icon="&#xe014;"></i></a></li>  
           </ul>          
         </nav>
